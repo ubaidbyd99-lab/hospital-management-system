@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login | {{ hospital_name }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="login-body">
+  <div class="login-card">
+    <section class="login-brand">
+      <img class="logo" src="{{ url_for('static', filename='img/logo.svg') }}" alt="Hospital logo">
+      <h1>{{ hospital_name }}</h1>
+      <p>A secure hospital information system for patients, doctors, appointments, and billing. All records are stored in Oracle Database.</p>
+    </section>
+    <section class="login-form">
+      <h2>Administrator login</h2>
+      <p class="hint">Use the account created on first startup, or the username you added in the USERS table.</p>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endwith %}
+      <form method="post">
+        <p>
+          <label for="username">Username</label>
+          <input id="username" name="username" required autocomplete="username">
+        </p>
+        <p>
+          <label for="password">Password</label>
+          <input id="password" type="password" name="password" required autocomplete="current-password">
+        </p>
+        <button class="btn" type="submit">Sign in</button>
+      </form>
+      <p class="help">Default first-run account is usually <strong>admin</strong> / <strong>Admin@123</strong>. Change it after your viva if this folder is shared.</p>
+    </section>
+  </div>
+</body>
+</html>

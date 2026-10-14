@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit appointment' if mode == 'edit' else 'Book appointment' }}{% endblock %}
+{% block heading %}{{ 'Edit appointment' if mode == 'edit' else 'Book an appointment' }}{% endblock %}
+{% block content %}
+<section class="panel">
+  <form method="post" class="form-grid">
+    <p>
+      <label for="patient_id">Patient</label>
+      <select id="patient_id" name="patient_id" required>
+        <option value="">Select a registered patient</option>
+        {% for p in patients %}
+          <option value="{{ p.patient_id }}" {% if appointment.patient_id|string == p.patient_id|string %}selected{% endif %}>
+            {{ p.patient_id }} — {{ p.full_name }}
+          </option>
+        {% endfor %}
+      </select>
+    </p>
+    <p>
+      <label for="doctor_id">Doctor</label>
+      <select id="doctor_id" name="doctor_id" required>
+        <option value="">Select a doctor</option>
+        {% for d in doctors %}
+          <option value="{{ d.doctor_id }}" {% if appointment.doctor_id|string == d.doctor_id|string %}selected{% endif %}>
+            {{ d.doctor_id }} — {{ d.full_name }} ({{ d.specialization }})
+          </option>
+        {% endfor %}
+      </select>
+    </p>
+    <p>
+      <label for="appointment_date">Date</label>
+      <input id="appointment_date" name="appointment_date" type="date" required
+             value="{{ appointment.appointment_date_input or appointment.appointment_date|ymd }}">
+    </p>
+    <p>
+      <label for="appointment_time">Time (24-hour)</label>
+      <input id="appointment_time" name="appointment_time" type="time" required value="{{ appointment.appointment_time or '' }}">
+    </p>
+    <p>
+      <label for="status">Status</label>
+      <select id="status" name="status" required>
+        {% for s in ['Scheduled', 'Completed', 'Cancelled'] %}
+          <option value="{{ s }}" {% if appointment.status == s %}selected{% endif %}>{{ s }}</option>
+        {% endfor %}
+      </select>
+    </p>
+    <p class="full">
+      <label for="notes">Notes</label>
+      <textarea id="notes" name="notes">{{ appointment.notes or '' }}</textarea>
+    </p>
+    <p class="full">
+      <button class="btn" type="submit">{{ 'Save changes' if mode == 'edit' else 'Book appointment' }}</button>
+      <a class="btn ghost" href="{{ url_for('appointments') }}">Cancel</a>
+    </p>
+  </form>
+</section>
+{% endblock %}

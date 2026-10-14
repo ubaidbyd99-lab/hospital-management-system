@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Bill {{ bill.bill_id }}{% endblock %}
+{% block heading %}Bill receipt{% endblock %}
+{% block content %}
+<div class="no-print">
+  <button class="btn" type="button" onclick="window.print()">Print receipt</button>
+  <a class="btn ghost" href="{{ url_for('bills') }}">Back to bills</a>
+</div>
+<article class="receipt">
+  <div class="receipt-head">
+    <div>
+      <img src="{{ url_for('static', filename='img/logo.svg') }}" alt="" width="48" height="48">
+      <h2>{{ hospital_name }}</h2>
+      <p>Official billing receipt</p>
+    </div>
+    <div>
+      <strong>Bill #{{ bill.bill_id }}</strong><br>
+      Date: {{ bill.bill_date|shortdate }}<br>
+      Status: {{ bill.payment_status }}
+    </div>
+  </div>
+  <p>
+    <strong>Patient:</strong> {{ bill.patient_name }} (ID {{ bill.patient_id }})<br>
+    Age/Gender: {{ bill.age }} / {{ bill.gender }}<br>
+    Phone: {{ bill.patient_phone }}<br>
+    Address: {{ bill.patient_address or '-' }}<br>
+    Appointment: {{ bill.appointment_id or 'Walk-in / unlinked' }}
+  </p>
+  <table>
+    <thead><tr><th>Description</th><th>Amount (Rs)</th></tr></thead>
+    <tbody>
+      <tr><td>Consultation fee</td><td>{{ bill.consultation_fee|inr }}</td></tr>
+      <tr><td>Additional charges</td><td>{{ bill.additional_charges|inr }}</td></tr>
+    </tbody>
+  </table>
+  <table class="totals">
+    <tr><td><strong>Total</strong></td><td><strong>{{ bill.total_amount|inr }}</strong></td></tr>
+    <tr><td>Paid</td><td>{{ bill.paid_amount|inr }}</td></tr>
+    <tr><td>Balance</td><td>{{ (bill.total_amount - bill.paid_amount)|inr }}</td></tr>
+  </table>
+  <p class="help">This receipt is generated from Oracle Database records. Keep it with the patient file.</p>
+</article>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Patients{% endblock %}
+{% block heading %}Patient management{% endblock %}
+{% block content %}
+<section class="panel">
+  <div class="toolbar">
+    <form class="search" method="get">
+      <input type="search" name="q" value="{{ search }}" placeholder="Search by patient ID, name, or phone">
+      <button class="btn secondary" type="submit">Search</button>
+    </form>
+    <a class="btn" href="{{ url_for('patient_new') }}">Add patient</a>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th><th>Name</th><th>Age</th><th>Gender</th><th>Phone</th><th>Disease</th><th>Registered</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for p in patients %}
+        <tr>
+          <td>{{ p.patient_id }}</td>
+          <td>{{ p.full_name }}</td>
+          <td>{{ p.age }}</td>
+          <td>{{ p.gender }}</td>
+          <td>{{ p.phone }}</td>
+          <td>{{ p.disease or '-' }}</td>
+          <td>{{ p.registration_date|shortdate }}</td>
+          <td class="row-actions">
+            <a class="btn small ghost" href="{{ url_for('patient_edit', patient_id=p.patient_id) }}">Edit</a>
+            <form method="post" action="{{ url_for('patient_delete', patient_id=p.patient_id) }}" data-confirm="Delete patient {{ p.full_name }}? This cannot be undone.">
+              <button class="btn small danger" type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+      {% else %}
+        <tr><td colspan="8" class="empty">No patients found.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit doctor' if mode == 'edit' else 'Add doctor' }}{% endblock %}
+{% block heading %}{{ 'Edit doctor' if mode == 'edit' else 'Add a doctor' }}{% endblock %}
+{% block content %}
+<section class="panel">
+  <form method="post" class="form-grid">
+    <p>
+      <label for="full_name">Full name</label>
+      <input id="full_name" name="full_name" required value="{{ doctor.full_name or '' }}">
+    </p>
+    <p>
+      <label for="specialization">Specialization</label>
+      <input id="specialization" name="specialization" required value="{{ doctor.specialization or '' }}" placeholder="for example Cardiology">
+    </p>
+    <p>
+      <label for="phone">Phone number</label>
+      <input id="phone" name="phone" required value="{{ doctor.phone or '' }}">
+    </p>
+    <p>
+      <label for="consultation_fee">Consultation fee</label>
+      <input id="consultation_fee" name="consultation_fee" type="number" min="0" step="0.01" required value="{{ doctor.consultation_fee or '' }}">
+    </p>
+    <p class="full">
+      <button class="btn" type="submit">{{ 'Save changes' if mode == 'edit' else 'Save doctor' }}</button>
+      <a class="btn ghost" href="{{ url_for('doctors') }}">Cancel</a>
+    </p>
+  </form>
+</section>
+{% endblock %}

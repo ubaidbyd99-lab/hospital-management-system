@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Doctors{% endblock %}
+{% block heading %}Doctor management{% endblock %}
+{% block content %}
+<section class="panel">
+  <div class="toolbar">
+    <form class="search" method="get">
+      <input type="search" name="q" value="{{ search }}" placeholder="Search by doctor ID, name, or specialization">
+      <button class="btn secondary" type="submit">Search</button>
+    </form>
+    <a class="btn" href="{{ url_for('doctor_new') }}">Add doctor</a>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th><th>Name</th><th>Specialization</th><th>Phone</th><th>Fee</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for d in doctors %}
+        <tr>
+          <td>{{ d.doctor_id }}</td>
+          <td>{{ d.full_name }}</td>
+          <td>{{ d.specialization }}</td>
+          <td>{{ d.phone }}</td>
+          <td>Rs {{ d.consultation_fee|inr }}</td>
+          <td class="row-actions">
+            <a class="btn small ghost" href="{{ url_for('doctor_appointments', doctor_id=d.doctor_id) }}">Appointments</a>
+            <a class="btn small ghost" href="{{ url_for('doctor_edit', doctor_id=d.doctor_id) }}">Edit</a>
+            <form method="post" action="{{ url_for('doctor_delete', doctor_id=d.doctor_id) }}" data-confirm="Delete doctor {{ d.full_name }}?">
+              <button class="btn small danger" type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+      {% else %}
+        <tr><td colspan="6" class="empty">No doctors found.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit patient' if mode == 'edit' else 'Add patient' }}{% endblock %}
+{% block heading %}{{ 'Edit patient' if mode == 'edit' else 'Register a new patient' }}{% endblock %}
+{% block content %}
+<section class="panel">
+  <form method="post" class="form-grid">
+    <p>
+      <label for="full_name">Full name</label>
+      <input id="full_name" name="full_name" required value="{{ patient.full_name or '' }}">
+    </p>
+    <p>
+      <label for="age">Age</label>
+      <input id="age" name="age" type="number" min="0" max="150" required value="{{ patient.age or '' }}">
+    </p>
+    <p>
+      <label for="gender">Gender</label>
+      <select id="gender" name="gender" required>
+        <option value="">Select gender</option>
+        {% for g in ['Male', 'Female', 'Other'] %}
+          <option value="{{ g }}" {% if patient.gender == g %}selected{% endif %}>{{ g }}</option>
+        {% endfor %}
+      </select>
+    </p>
+    <p>
+      <label for="phone">Phone number</label>
+      <input id="phone" name="phone" required value="{{ patient.phone or '' }}">
+    </p>
+    <p class="full">
+      <label for="address">Address</label>
+      <input id="address" name="address" value="{{ patient.address or '' }}">
+    </p>
+    <p class="full">
+      <label for="disease">Disease / complaint</label>
+      <input id="disease" name="disease" value="{{ patient.disease or '' }}">
+    </p>
+    <p class="full">
+      <button class="btn" type="submit">{{ 'Save changes' if mode == 'edit' else 'Save patient' }}</button>
+      <a class="btn ghost" href="{{ url_for('patients') }}">Cancel</a>
+    </p>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Doctor appointments{% endblock %}
+{% block heading %}Appointments for {{ doctor.full_name }}{% endblock %}
+{% block content %}
+<p class="hint">Specialization: {{ doctor.specialization }} · Fee: Rs {{ doctor.consultation_fee|inr }}</p>
+<section class="panel">
+  <div class="toolbar">
+    <a class="btn ghost" href="{{ url_for('doctors') }}">Back to doctors</a>
+    <a class="btn" href="{{ url_for('appointment_new') }}">Book appointment</a>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>Patient</th><th>Phone</th><th>Date</th><th>Time</th><th>Status</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+      {% for a in appointments %}
+        <tr>
+          <td>{{ a.appointment_id }}</td>
+          <td>{{ a.patient_name }}</td>
+          <td>{{ a.patient_phone }}</td>
+          <td>{{ a.appointment_date|shortdate }}</td>
+          <td>{{ a.appointment_time }}</td>
+          <td><span class="badge {{ a.status }}">{{ a.status }}</span></td>
+          <td>{{ a.notes or '-' }}</td>
+        </tr>
+      {% else %}
+        <tr><td colspan="7" class="empty">This doctor has no appointments yet.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

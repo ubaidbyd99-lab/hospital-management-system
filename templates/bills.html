@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Billing{% endblock %}
+{% block heading %}Billing and payments{% endblock %}
+{% block content %}
+<section class="panel">
+  <div class="toolbar">
+    <form class="search" method="get">
+      <input type="search" name="q" value="{{ search }}" placeholder="Search by bill ID, patient ID, name, or status">
+      <button class="btn secondary" type="submit">Search</button>
+    </form>
+    <a class="btn" href="{{ url_for('bill_new') }}">Generate bill</a>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Bill</th><th>Patient</th><th>Consultation</th><th>Extra</th><th>Total</th><th>Paid</th><th>Status</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for b in bills %}
+        <tr>
+          <td>{{ b.bill_id }}</td>
+          <td>{{ b.patient_name }}</td>
+          <td>Rs {{ b.consultation_fee|inr }}</td>
+          <td>Rs {{ b.additional_charges|inr }}</td>
+          <td>Rs {{ b.total_amount|inr }}</td>
+          <td>Rs {{ b.paid_amount|inr }}</td>
+          <td><span class="badge {{ b.payment_status }}">{{ b.payment_status }}</span></td>
+          <td class="row-actions">
+            <a class="btn small ghost" href="{{ url_for('bill_print', bill_id=b.bill_id) }}">Print</a>
+            <a class="btn small ghost" href="{{ url_for('bill_edit', bill_id=b.bill_id) }}">Edit</a>
+            <form method="post" action="{{ url_for('bill_delete', bill_id=b.bill_id) }}" data-confirm="Delete this bill?">
+              <button class="btn small danger" type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+      {% else %}
+        <tr><td colspan="8" class="empty">No bills found.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

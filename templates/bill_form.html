@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit bill' if mode == 'edit' else 'Generate bill' }}{% endblock %}
+{% block heading %}{{ 'Edit bill' if mode == 'edit' else 'Generate a patient bill' }}{% endblock %}
+{% block content %}
+<section class="panel">
+  <form method="post" class="form-grid">
+    <p>
+      <label for="patient_id">Patient</label>
+      <select id="patient_id" name="patient_id" required>
+        <option value="">Select a patient</option>
+        {% for p in patients %}
+          <option value="{{ p.patient_id }}" {% if bill.patient_id|string == p.patient_id|string %}selected{% endif %}>
+            {{ p.patient_id }} — {{ p.full_name }}
+          </option>
+        {% endfor %}
+      </select>
+    </p>
+    <p>
+      <label for="appointment_id">Related appointment (optional)</label>
+      <select id="appointment_id" name="appointment_id">
+        <option value="">None</option>
+        {% for a in appointments %}
+          <option value="{{ a.appointment_id }}" {% if bill.appointment_id|string == a.appointment_id|string %}selected{% endif %}>
+            {{ a.appointment_id }} — {{ a.patient_name }} with {{ a.doctor_name }}
+          </option>
+        {% endfor %}
+      </select>
+    </p>
+    <p>
+      <label for="consultation_fee">Consultation fee</label>
+      <input id="consultation_fee" name="consultation_fee" type="number" min="0" step="0.01" required value="{{ bill.consultation_fee or 0 }}">
+    </p>
+    <p>
+      <label for="additional_charges">Additional charges</label>
+      <input id="additional_charges" name="additional_charges" type="number" min="0" step="0.01" value="{{ bill.additional_charges or 0 }}">
+      <span class="help">Lab tests, medicines, or room charges.</span>
+    </p>
+    <p>
+      <label for="paid_amount">Amount paid now</label>
+      <input id="paid_amount" name="paid_amount" type="number" min="0" step="0.01" value="{{ bill.paid_amount or 0 }}">
+      <span class="help">Status becomes Unpaid, Partial, or Paid automatically from this amount.</span>
+    </p>
+    <p class="full">
+      <button class="btn" type="submit">{{ 'Save bill' if mode == 'edit' else 'Generate bill' }}</button>
+      <a class="btn ghost" href="{{ url_for('bills') }}">Cancel</a>
+    </p>
+  </form>
+</section>
+{% endblock %}

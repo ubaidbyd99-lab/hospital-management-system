@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block heading %}Hospital overview{% endblock %}
+{% block content %}
+<section class="cards">
+  <article class="card stat">
+    <div class="label">Total patients</div>
+    <p class="value">{{ stats.total_patients }}</p>
+  </article>
+  <article class="card stat">
+    <div class="label">Total doctors</div>
+    <p class="value">{{ stats.total_doctors }}</p>
+  </article>
+  <article class="card stat">
+    <div class="label">Total appointments</div>
+    <p class="value">{{ stats.total_appointments }}</p>
+  </article>
+  <article class="card stat gold">
+    <div class="label">Total revenue collected</div>
+    <p class="value">Rs {{ stats.total_revenue|inr }}</p>
+  </article>
+</section>
+<div class="grid-2">
+  <section class="panel">
+    <div class="panel-head"><h3>Recent appointments</h3><a class="btn small secondary" href="{{ url_for('appointments') }}">View all</a></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Patient</th><th>Doctor</th><th>When</th><th>Status</th></tr></thead>
+        <tbody>
+        {% for row in recent_appointments %}
+          <tr>
+            <td>{{ row.patient_name }}</td>
+            <td>{{ row.doctor_name }}</td>
+            <td>{{ row.appointment_date|shortdate }} {{ row.appointment_time }}</td>
+            <td><span class="badge {{ row.status }}">{{ row.status }}</span></td>
+          </tr>
+        {% else %}
+          <tr><td colspan="4" class="empty">No appointments yet.</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <section class="panel">
+    <div class="panel-head"><h3>Recently registered patients</h3><a class="btn small secondary" href="{{ url_for('patients') }}">View all</a></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>ID</th><th>Name</th><th>Disease</th><th>Registered</th></tr></thead>
+        <tbody>
+        {% for row in recent_patients %}
+          <tr>
+            <td>{{ row.patient_id }}</td>
+            <td>{{ row.full_name }}</td>
+            <td>{{ row.disease or '-' }}</td>
+            <td>{{ row.registration_date|shortdate }}</td>
+          </tr>
+        {% else %}
+          <tr><td colspan="4" class="empty">No patients yet.</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="LifeLine General Hospital logo">
+  <rect width="64" height="64" rx="16" fill="#0b6b6b"/>
+  <path d="M32 14c-8.8 0-16 6.3-16 16.2 0 11.2 12.4 19.2 15.1 20.7a1.8 1.8 0 0 0 1.8 0C35.6 49.4 48 41.4 48 30.2 48 20.3 40.8 14 32 14z" fill="#e8fffb"/>
+  <path d="M20 31h7l3-8 4 16 3-8h7" fill="none" stroke="#0b6b6b" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
