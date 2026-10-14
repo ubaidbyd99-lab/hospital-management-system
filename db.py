@@ -22,8 +22,19 @@ class DatabaseUnavailable(Exception):
     """Raised when Oracle cannot be reached or thick mode is not configured."""
 
 
+def _oracle_client_library_names():
+    if os.name == "nt":
+        return ("oci.dll",)
+    return ("libclntsh.so", "libclntsh.so.11.1", "libclntsh.so.23.1")
+
+
 def _client_dir_usable(path):
-    return bool(path and os.path.isdir(path) and os.path.isfile(os.path.join(path, "oci.dll")))
+    if not path or not os.path.isdir(path):
+        return False
+    return any(
+        os.path.isfile(os.path.join(path, name))
+        for name in _oracle_client_library_names()
+    )
 
 
 def find_oracle_client_lib():
@@ -61,6 +72,9 @@ def find_oracle_client_lib():
     # Fall back to a shallow search of common Oracle installation roots.
     roots = [
         os.path.expandvars(r"%USERPROFILE%\AppData\Local\Microsoft\WinGet\Packages"),
+        "/opt/oracle",
+        "/usr/lib/oracle",
+        "/usr/local/oracle",
         "C:\\oracle",
         "C:\\app",
         r"C:\Program Files\Oracle",
@@ -70,7 +84,7 @@ def find_oracle_client_lib():
         if not os.path.isdir(root):
             continue
         for current, dirnames, filenames in os.walk(root):
-            if "oci.dll" in filenames:
+            if any(name in filenames for name in _oracle_client_library_names()):
                 candidates.append(current)
                 # Stop descending once a client directory has been found.
                 dirnames[:] = []
