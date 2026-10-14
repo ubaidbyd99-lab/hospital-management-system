@@ -7,12 +7,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /opt/oracle && cd /opt/oracle && \
-    wget -q https://download.oracle.com/otn_software/linux/instantclient/2390000/instantclient-basic-linux.x64-23.9.0.25.07.zip && \
-    unzip -q instantclient-basic-linux.x64-23.9.0.25.07.zip && \
-    rm -f instantclient-basic-linux.x64-23.9.0.25.07.zip
+    wget -q https://download.oracle.com/otn_software/linux/instantclient/1923000/instantclient-basiclite-linux.x64-19.23.0.0.0dbru.zip && \
+    unzip -q instantclient-basiclite-linux.x64-19.23.0.0.0dbru.zip && \
+    rm -f instantclient-basiclite-linux.x64-19.23.0.0.0dbru.zip && \
+    echo /opt/oracle/instantclient_19_23 > /etc/ld.so.conf.d/oracle.conf && \
+    ldconfig
 
-ENV ORACLE_CLIENT_LIB=/opt/oracle/instantclient_23_9
-ENV LD_LIBRARY_PATH=/opt/oracle/instantclient_23_9
+ENV ORACLE_CLIENT_LIB=/opt/oracle/instantclient_19_23
+ENV LD_LIBRARY_PATH=/opt/oracle/instantclient_19_23
 
 COPY requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r /app/requirements.txt
